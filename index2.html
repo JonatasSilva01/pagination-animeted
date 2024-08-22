@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas Animation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0;
+    }
+
+    canvas {
+      background-color: #fff;
+      border: 2px solid #000;
+      cursor: pointer; /* Muda o cursor quando estiver sobre o canvas */
+    }
+
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="animationCanvas" width="400" height="400"></canvas>
+<br>
+<button id="playBtn">Iniciar</button>
+<button id="pauseBtn">Pausar</button>
+
+<script>
+  const canvas = document.getElementById('animationCanvas');
+  const ctx = canvas.getContext('2d');
+
+  let isPlaying = false;
+  let radius = 50;
+  let grow = true;
+  let animationFrameId;
+
+  // Função para desenhar o círculo
+  function drawCircle() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpa o canvas
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2, false);
+    ctx.fillStyle = 'royalblue';
+    ctx.fill();
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+  }
+
+  // Função para animar o círculo pulsando
+  function animate() {
+    if (grow) {
+      radius += 1;
+    } else {
+      radius -= 1;
+    }
+
+    if (radius >= 100) {
+      grow = false;
+    } else if (radius <= 50) {
+      grow = true;
+    }
+
+    drawCircle();
+    if (isPlaying) {
+      animationFrameId = requestAnimationFrame(animate);
+    }
+  }
+
+  // Função para iniciar a animação
+  function startAnimation() {
+    if (!isPlaying) {
+      isPlaying = true;
+      animate();
+    }
+  }
+
+  // Função para pausar a animação
+  function pauseAnimation() {
+    if (isPlaying) {
+      isPlaying = false;
+      cancelAnimationFrame(animationFrameId);
+    }
+  }
+
+  // Eventos para os botões
+  document.getElementById('playBtn').addEventListener('click', startAnimation);
+  document.getElementById('pauseBtn').addEventListener('click', pauseAnimation);
+
+  // Muda o cursor ao passar sobre o canvas
+  canvas.addEventListener('mouseenter', () => {
+    canvas.style.cursor = 'pointer';
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    canvas.style.cursor = 'default';
+  });
+
+  // Inicia com o círculo desenhado, mas sem animação
+  drawCircle();
+</script>
+
+</body>
+</html>

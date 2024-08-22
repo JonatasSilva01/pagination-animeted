@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mouse Interaction Animation</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: #000000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+    .square {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background-color: rgb(255, 255, 255);
+      opacity: 1;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Vamos criar muitos quadrados -->
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+  <div class="square"></div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.querySelector('.container');
+    const squares = document.querySelectorAll('.square');
+    
+    // Função para posicionar quadrados aleatoriamente
+    const positionSquares = () => {
+      squares.forEach(square => {
+        const x = Math.random() * (container.clientWidth - 50);
+        const y = Math.random() * (container.clientHeight - 50);
+        square.style.transform = `translate(${x}px, ${y}px)`;
+      });
+    };
+    
+    // Inicializa a posição dos quadrados
+    positionSquares();
+    
+    container.addEventListener('click', (event) => {
+      const rect = container.getBoundingClientRect();
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+      
+      // Cria uma DocumentTimeline personalizada
+      const timeline = new DocumentTimeline();
+      
+      // Define os keyframes para a animação
+      const keyframes = new KeyframeEffect(
+        squares[0], // Anima o primeiro quadrado
+        [
+          { transform: `translate(${mouseX}px, ${mouseY}px)` },
+          { transform: `translate(${Math.random() * (container.clientWidth - 50)}px, ${Math.random() * (container.clientHeight - 50)}px)` }
+        ],
+        {
+          duration: 500,
+          easing: 'ease-out',
+          fill: 'forwards'
+        }
+      );
+
+      // Animação para todos os quadrados
+      squares.forEach((square, index) => {
+        const anim = new Animation(
+          new KeyframeEffect(
+            square,
+            [
+              { transform: `translate(${mouseX}px, ${mouseY}px)` },
+              { transform: `translate(${Math.random() * (container.clientWidth - 50)}px, ${Math.random() * (container.clientHeight - 50)}px)` }
+            ],
+            {
+              duration: 500,
+              easing: 'ease-out',
+              fill: 'forwards'
+            }
+          ),
+          timeline
+        );
+        anim.play();
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

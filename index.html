@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Timeline Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #animatedBox {
+      width: 100px;
+      height: 100px;
+      background-color: royalblue;
+      margin: 100px auto;
+      opacity: 0;
+      transform: translateY(100px);
+    }
+  </style>
+</head>
+<body>
+
+<div id="animatedBox"></div>
+
+<script>
+  // Aguardando o carregamento do DOM
+  document.addEventListener('DOMContentLoaded', () => {
+    // Seleciona o elemento que será animado
+    const animatedBox = document.getElementById('animatedBox');
+
+    // Cria uma nova DocumentTimeline com uma origem personalizada (200ms antes)
+    const timeline = new DocumentTimeline({
+      originTime: document.timeline.currentTime - 200 // Atraso de 200ms antes do início
+    });
+
+    // Define os keyframes para a animação
+    const keyframes = new KeyframeEffect(
+      animatedBox,
+      [
+        { opacity: 0, transform: 'translateY(600px)' },
+        { opacity: 1, transform: 'translateY(0)' },
+        { opacity: 0, transform: 'translateY(600px)' }
+      ],
+      {
+        duration: 1000,    // Duração de 1 segundo
+        iterations: 2,     // quantas vezes quero repetir
+        direction: 'alternate', // direções que quero que ele vá
+        fill: 'backwards', // Aonde que mantem o estado do final
+        easing: 'ease-out', // Curva de transição suave
+        // delay: 2000, // Duração do tempo que vai começar a animação
+        // endDelay: 1000, // Duração do tempo final para ele começar de novo
+        // playbackRate: 5 // Aumenta a velocidade da animação para 2x
+      }
+    );
+
+    // Cria uma animação com a nova DocumentTimeline
+    const animation = new Animation(keyframes, timeline);
+
+    // Inicia a animação
+    animation.reverse();
+  });
+</script>
+
+</body>
+</html>
